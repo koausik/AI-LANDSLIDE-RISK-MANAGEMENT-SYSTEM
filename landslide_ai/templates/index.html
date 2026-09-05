@@ -5,22 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Aegis Landslide | Geospatial AI Early Warning Grid</title>
     
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Modern Command Typography Stack: Clash Display, Inter, Space Grotesk & Fira Code -->
+    <link href="https://fonts.cdnfonts.com/css/clash-display" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     
     <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     
-    <!-- Custom CSS -->
+    <!-- Custom CSS Link -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
+    <!-- Interactive Background Layer -->
+    <div class="interactive-bg-mesh"></div>
+    <div class="interactive-glow" id="mouseGlow"></div>
 
     <!-- Enterprise Top Navigation Bar -->
     <nav class="enterprise-nav">
         <div class="nav-container">
             <div class="nav-brand">
-                <span class="brand-icon">⚡</span>
                 <span class="brand-name">THUNDERBOLTS</span>
                 <span class="brand-sub">AEGIS LANDSLIDE GRID</span>
             </div>
@@ -28,14 +32,10 @@
             <div class="nav-links">
                 <a href="#solution" class="nav-link">Solution Architecture</a>
                 <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#simulator" class="nav-link nav-sim-pill">🧪 Physical Simulator</a>
                 <a href="#live-demo" class="nav-link nav-demo-pill">🔴 Live Operations Demo</a>
             </div>
 
-            <div class="nav-actions">
-                <div class="live-clock-tag">
-                    <span class="pulse-beacon"></span>
-                    <span id="navLiveClock">--:--:-- IST</span>
-                </div>
                 <button class="nav-hotline-btn" onclick="alert('National Disaster Response Force (NDRF) Hotline: 1078 / 112 engaged.')">
                     🚨 Emergency Hotline: 1078
                 </button>
@@ -43,25 +43,34 @@
         </div>
     </nav>
 
-    <!-- Main Container -->
+    <!-- Main Layout Container -->
     <div class="app-layout">
 
         <!-- HERO SECTION -->
         <header class="hero-block">
+            <div class="hero-brand-header">
+                <img src="{{ url_for('static', filename='thunderbolts.png') }}" alt="Thunderbolts Emblem" class="hero-brand-img" onerror="this.src='https://placehold.co/80x80/00f2fe/ffffff?text=%E2%9A%A1';">
+                <span class="hero-brand-name">THUNDERBOLTS</span>
+            </div>
+
             <div class="hero-chip">
                 <span class="chip-dot"></span>
                 <span>GEOSPATIAL AI &amp; HYDROLOGICAL TELEMETRY PLATFORM</span>
             </div>
+            
             <h1 class="hero-headline">
                 Autonomous Landslide Early Warning &amp; Slope Stability System
             </h1>
+            
             <p class="hero-subtext">
                 Fusing high-resolution Synthetic Aperture Radar (SAR), real-time microwave soil saturation telemetry, and physics-informed Machine Learning to forecast catastrophic slope failure across vulnerable sectors in India.
             </p>
+            
             <div class="hero-cta-group">
                 <a href="#live-demo" class="btn-primary">Launch Live AI Scanner</a>
-                <a href="#how-it-works" class="btn-secondary">Explore AI Pipeline</a>
+                <a href="#simulator" class="btn-secondary">Test Physical Simulator</a>
             </div>
+            
             <div class="hero-metrics-strip">
                 <div class="metric-pill">
                     <span class="pill-value">30m</span>
@@ -97,7 +106,7 @@
                     <div class="card-icon-wrap">🛰️</div>
                     <h3 class="card-title">Multi-Spectrum Space Telemetry</h3>
                     <p class="card-text">
-                        Automated real-time ingestion from Copernicus &amp; Open-Meteo feeds. Gathers hourly 24h precipitation accumulations ($P$) and volumetric soil moisture index ($m_s$) at root-zone pore level.
+                        Automated real-time ingestion from Copernicus &amp; Open-Meteo feeds. Gathers hourly 24h precipitation accumulations and volumetric soil moisture index at root-zone pore level.
                     </p>
                     <div class="card-badge">Zero Ground Hardware Required</div>
                 </div>
@@ -106,7 +115,7 @@
                     <div class="card-icon-wrap">🧠</div>
                     <h3 class="card-title">Ensemble Geotechnical AI</h3>
                     <p class="card-text">
-                        A Random Forest classifier trained on thousands of simulated geotechnical slope variations. Evaluates the physical coupling between gravity shear stress, slope angle ($\theta$), and hydrostatic pore pressures.
+                        A Random Forest classifier trained on thousands of simulated geotechnical slope variations. Evaluates the physical coupling between gravity shear stress, slope angle, and hydrostatic pore pressures.
                     </p>
                     <div class="card-badge">Continuous Probability Calibration</div>
                 </div>
@@ -151,7 +160,7 @@
                     <div class="step-badge-tag">GEOTECHNICAL MAPPING</div>
                     <div class="step-icon">⛰️</div>
                     <h4 class="step-title">DEM Slope Extraction</h4>
-                    <p class="step-desc">Digital Elevation Model extracts terrain incline angle ($\theta$) and constructs the standardized feature tensor: $[Rain, Moisture, Slope]$.</p>
+                    <p class="step-desc">Digital Elevation Model extracts terrain incline angle and constructs the standardized feature tensor across physical coordinates.</p>
                     <div class="step-tech">NumPy &bull; Topographic Modeling</div>
                 </div>
 
@@ -164,7 +173,7 @@
                     <div class="step-badge-tag">INFERENCE ENGINE</div>
                     <div class="step-icon">⚡</div>
                     <h4 class="step-title">Random Forest AI</h4>
-                    <p class="step-desc">Trained classifier computes multi-feature hazard score and derives instantaneous structural stability percentage ($\text{100} - \text{Risk}\%$).</p>
+                    <p class="step-desc">Trained classifier computes multi-feature hazard score and derives instantaneous structural stability percentage.</p>
                     <div class="step-tech">Scikit-Learn &bull; Flask Core</div>
                 </div>
 
@@ -179,6 +188,103 @@
                     <h4 class="step-title">Automated Warning</h4>
                     <p class="step-desc">Threshold comparison triggers tier alerts: Safe (&gt;65%), Elevated Watch (41-64%), or Critical Hazard (&ge;60% failure risk with siren protocol).</p>
                     <div class="step-tech">Dynamic UI &bull; First Responder Ready</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: INTERACTIVE GEOTECHNICAL LANDSLIDE SIMULATOR (CONTROLS ON LEFT, CANVAS ON RIGHT) -->
+        <section id="simulator" class="content-section">
+            <div class="section-title-wrap">
+                <span class="section-tag sim-tag">GEOTECHNICAL FAILURE LAB</span>
+                <h2 class="section-heading">Interactive Physical Landslide Simulator</h2>
+                <p class="section-description">
+                    Simulate real-time Mohr-Coulomb shear failure and pore-water pressure mechanics. Adjust geotechnical parameters to observe how soil saturation and incline trigger slip-surface collapse.
+                </p>
+            </div>
+
+            <div class="sim-container sim-controls-left">
+                <!-- Interactive Geotechnical Sliders (LEFT SIDE) -->
+                <div class="sim-controls-card">
+                    <h3 class="controls-title">Geotechnical Variables</h3>
+                    
+                    <div class="slider-group">
+                        <div class="slider-info">
+                            <label for="simSlope">Slope Gradient (&theta;)</label>
+                            <span class="slider-val" id="valSimSlope">32°</span>
+                        </div>
+                        <input type="range" id="simSlope" min="10" max="65" value="32" step="1" oninput="updateSimParameters()">
+                        <span class="slider-hint">Terrain inclination angle from horizontal</span>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-info">
+                            <label for="simRain">Rainfall Volume (24h)</label>
+                            <span class="slider-val" id="valSimRain">40 mm</span>
+                        </div>
+                        <input type="range" id="simRain" min="0" max="250" value="40" step="5" oninput="updateSimParameters()">
+                        <span class="slider-hint">Downpour intensity driving seepage force</span>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-info">
+                            <label for="simMoisture">Pore Saturation (m<sub>s</sub>)</label>
+                            <span class="slider-val" id="valSimMoisture">35%</span>
+                        </div>
+                        <input type="range" id="simMoisture" min="10" max="100" value="35" step="1" oninput="updateSimParameters()">
+                        <span class="slider-hint">Pore water pressure reducing effective stress</span>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-info">
+                            <label for="simFriction">Soil Friction Angle (&phi;')</label>
+                            <span class="slider-val" id="valSimFriction">30°</span>
+                        </div>
+                        <input type="range" id="simFriction" min="15" max="45" value="30" step="1" oninput="updateSimParameters()">
+                        <span class="slider-hint">Internal shear resistance of soil particles</span>
+                    </div>
+
+                    <div class="sim-summary-box" id="simSummaryBox">
+                        <div class="summary-icon" id="simSummaryIcon">🛡️</div>
+                        <div class="summary-text" id="simSummaryText">
+                            <strong>Slope in Limit Equilibrium:</strong> Resisting forces exceed driving shear gravitational forces (FS = 1.62). Particles remain firmly bound to bedrock.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Canvas Card (RIGHT SIDE) -->
+                <div class="sim-canvas-card">
+                    <div class="sim-canvas-header">
+                        <div class="sim-status-pill">
+                            <span class="sim-dot" id="simDot"></span>
+                            <span id="simStatusText">EQUILIBRIUM STABLE (FS &gt; 1.0)</span>
+                        </div>
+                        <div class="sim-preset-chips">
+                            <button class="preset-btn" onclick="loadSimPreset('dry')">Dry Stable</button>
+                            <button class="preset-btn" onclick="loadSimPreset('monsoon')">Heavy Monsoon</button>
+                            <button class="preset-btn" onclick="loadSimPreset('critical')">Critical Avalanche</button>
+                            <button class="preset-btn reset-btn" onclick="resetSimulator()">↺ Reset</button>
+                        </div>
+                    </div>
+
+                    <div class="canvas-wrapper">
+                        <canvas id="landslideCanvas" width="750" height="380"></canvas>
+                        
+                        <!-- HUD Overlays -->
+                        <div class="sim-hud">
+                            <div class="hud-stat">
+                                <span class="hud-lbl">FACTOR OF SAFETY (FS)</span>
+                                <span class="hud-val" id="hudFS">1.62</span>
+                            </div>
+                            <div class="hud-stat">
+                                <span class="hud-lbl">SHEAR STRESS (&tau;)</span>
+                                <span class="hud-val" id="hudShear">38.4 kPa</span>
+                            </div>
+                            <div class="hud-stat">
+                                <span class="hud-lbl">FAILURE STATE</span>
+                                <span class="hud-val" id="hudState">EQUILIBRIUM</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
